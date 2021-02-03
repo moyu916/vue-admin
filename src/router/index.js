@@ -17,7 +17,51 @@ const routes = [
   {
     path: '/home',
     name: 'Home',
-    component: () => import('@/views/home/Home.vue')
+    component: () => import('@/views/home/Home.vue'),
+    redirect: '/users',
+    children: [
+      {
+        path: '/users',
+        name: 'User',
+        component: () => import('@/views/home/user/User.vue')
+      },
+      {
+        path: '/rights',
+        name: 'Right',
+        component: () => import('@/views/home/power/Right.vue')
+      },
+      {
+        path: '/roles',
+        name: 'Role',
+        component: () => import('@/views/home/power/Role.vue')
+      },
+      {
+        path: '/categories',
+        name: 'Category',
+        component: () => import('@/views/home/goods/Category.vue')
+      },
+      {
+        path: '/params',
+        name: 'Param',
+        component: () => import('@/views/home/goods/Param.vue')
+      },
+      {
+        path: '/goods',
+        name: 'GoodsList',
+        component: () => import('@/views/home/goods/GoodsList.vue')
+      },
+      {
+        path: '/orders',
+        name: 'Order',
+        component: () => import('@/views/home/order/Order.vue')
+      },
+      {
+        path: '/reports',
+        name: 'Report',
+        component: () => import('@/views/home/report/Report.vue')
+      },
+
+    ]
   }
 ]
 
