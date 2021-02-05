@@ -1,5 +1,6 @@
 import service from './index'
 
+// 请求用户信息列表
 export function getUserList_req(params) {
     return service({
         url: 'users',
@@ -8,6 +9,7 @@ export function getUserList_req(params) {
     })
 }
 
+// 修改某个用户状态
 export function modifyUserStatus_req(params) {
     return service({
         url: `users/${params.id}/state/${params.mg_state}`,
@@ -15,6 +17,7 @@ export function modifyUserStatus_req(params) {
     })
 }
 
+// 添加新用户
 export function addUser_req(data) {
     return service({
         url: 'users',
@@ -23,6 +26,7 @@ export function addUser_req(data) {
     })
 }
 
+// 请求某个用户的信息
 export function getUserInfo_req(id) {
     return service({
         url: `users/${id}`,
@@ -30,6 +34,7 @@ export function getUserInfo_req(id) {
     })
 }
 
+// 修改某个用户信息
 export function modifyUserInfo_req(data) {
     return service({
         url: `users/${data.id}`,
@@ -38,5 +43,13 @@ export function modifyUserInfo_req(data) {
             email: data.email,
             mobile: data.mobile
         }
+    })
+}
+
+// 删除某个用户信息
+export function deleteUserInfo_req(id) {
+    return service({
+        url: `users/${id}`,
+        method: 'delete',
     })
 }
