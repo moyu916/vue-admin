@@ -8,7 +8,7 @@ export function getAuthority_req (type) {
     })
 }
 
-// 
+// 获取角色列表
 export function getRolelist_req () {
     return service({
         url: 'roles',

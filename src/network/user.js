@@ -53,3 +53,12 @@ export function deleteUserInfo_req(id) {
         method: 'delete',
     })
 }
+
+// 分配角色
+export function saveRoleInfo_req(userId, data) {
+    return service ({
+        url: `users/${userId}/role`,
+        method: 'put',
+        data
+    })
+}
