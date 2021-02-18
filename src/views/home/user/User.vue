@@ -26,7 +26,7 @@
         </el-row>
 
         <!-- 用户列表区域 -->
-        <el-table :data="userlist" style="width: 100%" border stripe>
+        <!-- <el-table :data="userlist" style="width: 100%" border stripe>
           <el-table-column type="index"></el-table-column>
           <el-table-column label="姓名" prop="username"></el-table-column>
           <el-table-column label="邮箱" prop="email"></el-table-column>
@@ -40,17 +40,50 @@
           </el-table-column>
           <el-table-column label="操作" >
             <template slot-scope="scope">
-              <!-- 修改按钮 -->
-              <el-button type="primary" icon="el-icon-edit" size="mini" @click="showEditDialog(scope.row.id)"></el-button>
+              修改按钮 -->
+              <!-- <el-button type="primary" icon="el-icon-edit" size="mini" @click="showEditDialog(scope.row.id)"></el-button> -->
               <!-- 删除按钮 -->
-              <el-button type="danger" icon="el-icon-delete" size="mini" @click="removeUserById(scope.row.id)"></el-button>
+              <!-- <el-button type="danger" icon="el-icon-delete" size="mini" @click="removeUserById(scope.row.id)"></el-button> -->
               <!-- 分配角色按钮 -->
-              <el-tooltip effect="dark" content="分配角色" placement="top" :enterable="false">
+              <!-- <el-tooltip effect="dark" content="分配角色" placement="top" :enterable="false">
                 <el-button type="warning" icon="el-icon-setting" size="mini" @click="setRole(scope.row)"></el-button>
               </el-tooltip>              
             </template>
           </el-table-column>         
-        </el-table>
+        </el-table> -->
+
+        <li-table :columns="columns" :data="userlist" index>
+            <template slot-scope="{ row }" slot="name">
+              {{ row.username }}
+            </template>
+            <template slot-scope="{ row }" slot="email">
+              {{ row.email }}
+            </template> 
+            <template slot-scope="{ row }" slot="mobile">
+              {{ row.mobile }}
+            </template>   
+            <template slot-scope="{ row }" slot="role_name">
+              {{ row.role_name }}
+            </template>                    
+            <template slot-scope="{ row }" slot="mg_state">
+              <el-switch v-model="row.mg_state" @change="userStateChanged(scope.row)">
+              </el-switch>
+            </template>
+            <template slot-scope="{ row }" slot="type">
+                <!-- <input type="text" v-model="editName" v-if="editIndex === index" />
+                <span v-else>{{ row.name }}</span> -->
+              <!-- 修改按钮 -->
+              <el-button type="primary" icon="el-icon-edit" size="mini" @click="showEditDialog(row.id)"></el-button>
+              <!-- 删除按钮 -->
+              <el-button type="danger" icon="el-icon-delete" size="mini" @click="removeUserById(row.id)"></el-button>
+              <!-- 分配角色按钮 -->
+              <el-tooltip effect="dark" content="分配角色" placement="top" :enterable="false">
+                <el-button type="warning" icon="el-icon-setting" size="mini" @click="setRole(row)"></el-button>
+              </el-tooltip>
+            </template>
+        </li-table>
+
+
         <!-- 分页显示 -->
         <el-pagination
           @size-change="handleSizeChange"
@@ -136,8 +169,13 @@ import { getUserList_req,
           } from '@/network/user.js'
 
 import { getRolelist_req } from '@/network/authority.js'
+
+import LiTable from '@/components/table/LiTable'
 export default {
   name: 'User',
+  components: {
+    LiTable
+  },
   data() {
     // 验证邮箱的规则
     var checkEmail = (rule, value, cb) => {
@@ -169,6 +207,32 @@ export default {
         pagenum: 1,
         pagesize: 2
       },
+      columns: [
+          {
+              title: '姓名',
+              slot: 'name'
+          },
+          {
+              title: '邮箱',
+              slot: 'email'
+          },
+          {
+              title: '电话',
+              slot: 'mobile'
+          },
+          {
+              title: '角色',
+              slot: 'role_name'
+          },
+          {
+              title: '状态',
+              slot: 'mg_state'
+          },
+          {
+              title: '操作',
+              slot: 'type'
+          }
+      ],
       userlist: [],
       total: 0,
       // 控制添加用户对话框的显示与隐藏

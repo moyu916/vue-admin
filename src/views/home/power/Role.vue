@@ -61,7 +61,12 @@
     <!-- 分配权限的对话框 -->
     <el-dialog title="分配权限" :visible.sync="setRightDialogVisible" width="50%" @close="setRightDialogClosed">
       <!-- 树形控件 -->
-      <el-tree :data="rightslist" :props="treeProps" show-checkbox node-key="id" default-expand-all :default-checked-keys="defKeys" ref="treeRef"></el-tree>
+      <!-- <el-tree :data="rightslist" :props="treeProps" show-checkbox  default-expand-all :default-checked-keys="defKeys" ref="treeRef"></el-tree> -->
+      <li-tree :data="rightslist"  :prop="treeProps" showCheckbox ref="treeRef" :default_checked_keys="defKeys"
+                @on-toggle-expand="handleToggleExpand" 
+                @on-check-change="handleCheckChange"
+                ></li-tree>
+
       <span slot="footer" class="dialog-footer">
         <el-button @click="setRightDialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="allotRights">确 定</el-button>
@@ -73,7 +78,9 @@
 
 <script>
 import { getRolelist_req, deleteAuth_req, getAuthTree_req, allotAuth_req } from '@/network/authority'
+import LiTree from '@/components/tree/LiTree.vue'
 export default {
+  components: { LiTree },
   name: 'Role',
   data() {
     return {
@@ -84,20 +91,40 @@ export default {
       // 所有权限的数据
       rightslist: [],
       // 树形控件的属性绑定对象
-      treeProps: {
-        label: 'authName',
-        children: 'children'
-      },
+      // treeProps: {
+      //   label: 'authName',
+      //   children: 'children'
+      // },
+      treeProps: 'authName',
       // 默认选中的节点Id值数组
       defKeys: [],
       // 当前即将分配权限的角色id
-      roleId: ''
+      roleId: '',
+
+      // 提交checked数据
+      keys: []
     }
   },
   created() {
     this.getRolelist()
   },
   methods: {
+        handleToggleExpand (data) {
+            console.log(data);
+        },
+        handleCheckChange (data) {
+            console.log(data);
+            if(data.checked) {
+              this.keys.push(data.id)
+            }
+            else{
+              this.keys.splice(this.keys.indexOf(data.id),1)
+            }
+        },
+        // // 非第三级节点的 被动选中
+        // handleFaChecked (data) {
+        //   this.keys.push(data.id)
+        // },
     // 获取所有角色的列表
     async getRolelist() {
       const { data: res } = await getRolelist_req()
@@ -149,9 +176,11 @@ export default {
       // console.log(this.rightslist)
 
       // 递归获取三级节点的Id
-      this.getLeafKeys(role, this.defKeys)      
+      this.getLeafKeys(role, this.defKeys)  
+      this.keys = this.defKeys    
 
       this.setRightDialogVisible = true
+      // console.log(this.defKeys)
     },
     // 通过递归的形式，获取角色下所有三级权限的id，并保存到 defKeys 数组中
     getLeafKeys(node, arr) {
@@ -170,13 +199,13 @@ export default {
     
     // 点击为角色分配权限
     async allotRights() {
-      const keys = [
-        ...this.$refs.treeRef.getCheckedKeys(),
-        ...this.$refs.treeRef.getHalfCheckedKeys()
-      ]
+      // const keys = [
+      //   ...this.$refs.treeRef.getCheckedKeys(),
+      //   ...this.$refs.treeRef.getHalfCheckedKeys()
+      // ]
 
-      const idStr = keys.join(',')
-      // console.log(idStr)
+      const idStr = this.keys.join(',')
+      console.log(idStr)
 
       
       const { data: res } = await allotAuth_req(this.roleId, {rids: idStr})

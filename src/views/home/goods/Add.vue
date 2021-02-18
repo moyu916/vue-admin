@@ -82,7 +82,7 @@
 </template>
 
 <script>
-import {deepClone} from '@/assets/deepClone'
+import {deepClone} from '@/assets/js/deepClone'
 import { getCateList_req, getParams_req } from '@/network/goods-param'
 import { addGood_req } from '@/network/goods-list'
 

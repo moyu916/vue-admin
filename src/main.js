@@ -5,12 +5,13 @@ import store from './store'
 
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
+
 import '@/assets/normalize.css'
 import '@/assets/global.css'
 
-Vue.config.productionTip = false
+Vue.use(ElementUI)
 
-Vue.use(ElementUI);
+Vue.config.productionTip = false
 
 new Vue({
   router,
